@@ -2,26 +2,26 @@ package com.sportsradar.scoreboard.model;
 
 import java.util.Map;
 
-public class Score {
+public class Game {
 
-    private Map<String, String> homeTeamScore;
+    private Map<String, String> homeTeam;
 
-    private Map<String, String> awayTeamScore;
+    private Map<String, String> awayTeam;
 
-    public Map<String, String> getHomeTeamScore() {
-        return homeTeamScore;
+    public Map<String, String> getHomeTeam() {
+        return homeTeam;
     }
 
-    public void setHomeTeamScore(Map<String, String> homeTeamScore) {
-        this.homeTeamScore = homeTeamScore;
+    public void setHomeTeam(Map<String, String> homeTeam) {
+        this.homeTeam = homeTeam;
     }
 
-    public Map<String, String> getAwayTeamScore() {
-        return awayTeamScore;
+    public Map<String, String> getAwayTeam() {
+        return awayTeam;
     }
 
-    public void setAwayTeamScore(Map<String, String> awayTeamScore) {
-        this.awayTeamScore = awayTeamScore;
+    public void setAwayTeam(Map<String, String> awayTeam) {
+        this.awayTeam = awayTeam;
     }
 
     @Override
@@ -31,11 +31,11 @@ public class Score {
         String awayTeamName = null;
         String awayTeamScore = null;
 
-        for(Map.Entry<String, String> entry: this.homeTeamScore.entrySet()){
+        for(Map.Entry<String, String> entry: this.homeTeam.entrySet()){
             homeTeamName = entry.getKey();
             homeTeamScore = entry.getValue();
         }
-        for(Map.Entry<String, String> entry: this.awayTeamScore.entrySet()){
+        for(Map.Entry<String, String> entry: this.awayTeam.entrySet()){
             awayTeamName = entry.getKey();
             awayTeamScore = entry.getValue();
         }

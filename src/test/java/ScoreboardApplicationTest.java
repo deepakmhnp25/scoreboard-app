@@ -18,7 +18,7 @@ public class ScoreboardApplicationTest {
     private ScoreboardApplication scoreboardApplication;
 
     @Before
-    public void initTest(){
+    public void initTest() {
         scoreboardApplication = new ScoreboardApplication();
     }
 
@@ -65,18 +65,37 @@ public class ScoreboardApplicationTest {
 
     /**
      * This test ensures the ability to start multiple games
+     *
      * @throws Exception
      */
     @Test
-    public void shouldStartMultipleGames() throws Exception{
+    public void shouldStartMultipleGames() throws Exception {
 
         // Given option 1 to start the game, add multiple games
         InputStream stdin = supplyInputs("1\nLiverpool FC\nAC Milan\n1\nManu FC\nBarcelona\n5");
         // when
-        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);;
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        ;
         // then
         assertOutput(byteArrayOutputStream, "Liverpool FC - AC Milan: 0 - 0");
         assertOutput(byteArrayOutputStream, "Manu FC - Barcelona: 0 - 0");
+    }
+
+    /**
+     * Same team can not play more than one match
+     *
+     * @throws Exception
+     */
+    @Test
+    public void sameTeamSouldOnlyPlayOneMatch() throws Exception {
+
+        // Given option 1 to start the game, add multiple games
+        InputStream stdin = supplyInputs("1\nLiverpool FC\nAC Milan\n1\nLiverpool FC\nAC Milan\n5");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        ;
+        // then
+        assertOutput(byteArrayOutputStream, "Team is already playing, You cant start another game with the same team !");
     }
 
     /**
@@ -87,7 +106,8 @@ public class ScoreboardApplicationTest {
         // Given option 1 to start the game, Enter show main menu option instead of adding home team name
         InputStream stdin = supplyInputs("1\n5");
         // when
-        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);;
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        ;
         // then
         assertOutput(byteArrayOutputStream, "Exiting to Main Menu ...");
     }
@@ -100,7 +120,8 @@ public class ScoreboardApplicationTest {
         // Given option 1 to start the game, Enter show main menu option instead of adding away team name
         InputStream stdin = supplyInputs("1\nLiverpool FC\n5");
         // when
-        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);;
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        ;
         // then
         assertOutput(byteArrayOutputStream, "Exiting to Main Menu ...");
     }
@@ -128,11 +149,48 @@ public class ScoreboardApplicationTest {
         // when
         ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
         // then
-        assertOutput(byteArrayOutputStream, "Liverpool FC - AC Milan: 0 - 0 Finished !");
+        assertOutput(byteArrayOutputStream, "Game Finished !");
+    }
+
+    /**
+     * Trying to finish a game which is not ongoing.
+     */
+    @Test
+    public void teamShouldPlayToFinishTheGame() {
+        // Given option 1 to start the game,
+        InputStream stdin = supplyInputs("1\nManu FC\nBarcelona\n2\nLiverpool FC\n5");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        // then
+        assertOutput(byteArrayOutputStream, "There is no ongoing matches from the input team name");
+    }
+
+    /**
+     * Update score for an ongoing match
+     */
+    @Test
+    public void shouldUpdateScore() {
+        // Given option 1 to start the game, update the score
+        InputStream stdin = supplyInputs("1\nManu FC\nBarcelona\n3\nManu FC\n2\n1");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        // then
+        assertOutput(byteArrayOutputStream, "Score updated successfully!");
+    }
+
+    @Test
+    public void matchShouldExistToUpdateTheScore() {
+        // Given option 1 to start the game, try to update the score for another match
+        InputStream stdin = supplyInputs("1\nManu FC\nBarcelona\n3\nLiverpool FC");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        // then
+        assertOutput(byteArrayOutputStream, "There is no ongoing matches from the input team name");
     }
 
     /**
      * Generic Method to assert the output
+     *
      * @param byteArrayOutputStream
      * @param expected
      */
@@ -144,6 +202,7 @@ public class ScoreboardApplicationTest {
 
     /**
      * Generic Method to execute Selected menu operation
+     *
      * @param stdin
      * @return
      */
@@ -155,12 +214,14 @@ public class ScoreboardApplicationTest {
         String[] args = {};
         ScoreboardApplication.main(args);
         System.setIn(stdin);
-        System.setOut(stdout);;
+        System.setOut(stdout);
+        ;
         return byteArrayOutputStream;
     }
 
     /**
      * Generic Method to create user inputs to the system
+     *
      * @param userInputs
      * @return
      */

@@ -1,6 +1,6 @@
 package com.sportsradar.scoreboard.service;
 
-import com.sportsradar.scoreboard.model.Score;
+import com.sportsradar.scoreboard.model.Game;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +12,14 @@ public class ScoreBoardService {
      * @param homeTeam
      * @param awayTeam
      */
-    public Score startGame(String homeTeam, String awayTeam) {
-        Score startingScore = new Score();
+    public Game startGame(String homeTeam, String awayTeam) {
+        Game startingGame = new Game();
         Map<String, String> homeTeamMap = new HashMap<>();
         homeTeamMap.put(homeTeam, "0");
-        startingScore.setHomeTeamScore(homeTeamMap);
+        startingGame.setHomeTeam(homeTeamMap);
         Map<String, String> awayTeamMap = new HashMap<>();
         awayTeamMap.put(awayTeam, "0");
-        startingScore.setAwayTeamScore(awayTeamMap);
-        return startingScore;
+        startingGame.setAwayTeam(awayTeamMap);
+        return startingGame;
     }
 }
