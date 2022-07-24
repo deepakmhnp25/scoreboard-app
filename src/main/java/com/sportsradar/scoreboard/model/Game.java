@@ -2,6 +2,12 @@ package com.sportsradar.scoreboard.model;
 
 import java.util.Map;
 
+/**
+ * Pojo Class represent each game
+ *
+ * @Author Deepak Mohan
+ * @Version 1.0
+ */
 public class Game {
 
     private Map<String, String> homeTeam;

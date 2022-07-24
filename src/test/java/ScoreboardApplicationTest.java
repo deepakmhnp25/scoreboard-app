@@ -1,3 +1,4 @@
+import com.sportsradar.scoreboard.ScoreboardApplication;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import java.io.PrintStream;
 /**
  * Test Class for Testing Various Functionalities of Scoreboard Application
  *
- * @Autthor Deepak Mohan
+ * @Author Deepak Mohan
  * @Version 1.0
  */
 public class ScoreboardApplicationTest {
