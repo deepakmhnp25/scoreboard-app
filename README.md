@@ -5,6 +5,7 @@
 
 # Assumptions
 * Home Team is shown first in the scoreboard
+* Tests are not parameterized (@ParameterizedTest) purposefully in order to be more clearer regarding the purpose
 # Prerequisites (To run the application)
 * Maven
 * JDK
