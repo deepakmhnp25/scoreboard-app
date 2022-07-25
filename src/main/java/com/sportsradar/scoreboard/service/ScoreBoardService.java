@@ -71,6 +71,7 @@ public class ScoreBoardService {
      */
     public void getScoreSummary(PrintStream printStream, List<Game> gameSummary) {
         printStream.println("LIVE SCORE (Summary)\n==============");
+        // sort using the index of the linked list and total score
         List<Game> orderedList = gameSummary.stream().sorted(
                 (o1, o2) -> {
                     if (o1.getTotalScore() == o2.getTotalScore()) {
