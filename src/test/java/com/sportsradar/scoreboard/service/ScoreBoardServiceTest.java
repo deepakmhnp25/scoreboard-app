@@ -63,6 +63,9 @@ public class ScoreBoardServiceTest {
         Assert.assertEquals(Integer.valueOf(3), Integer.valueOf(game.getAwayTeam().entrySet().stream().findFirst().get().getValue()));
     }
 
+    /**
+     * should show sorted summary
+     */
     @Test
     public void shouldShowSortedSummary() {
         //when
@@ -84,6 +87,20 @@ public class ScoreBoardServiceTest {
 
         //then
         assertOutput(byteArrayOutputStream, "LIVE SCORE (Summary)\n==============\r\nJuventus FC - AC Milan: 5 - 3\r\nLiverpool FC - As Monaco: 1 - 1\r\n");
+    }
+
+    /**
+     * should show no ongoing match message
+     */
+    @Test
+    public void shouldShowNoOngoingMatchMessage() {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(byteArrayOutputStream);
+        PrintStream stdout = System.out;
+        System.setOut(ps);
+        scoreBoardService.getScoreSummary(ps, new LinkedList<Game>());
+        //then
+        assertOutput(byteArrayOutputStream, "There are no ongoing live matches currently !");
     }
 
     private void scoreUpdate(String userInputs, Game game) {

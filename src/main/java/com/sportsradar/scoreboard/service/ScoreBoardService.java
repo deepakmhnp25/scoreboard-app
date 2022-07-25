@@ -69,6 +69,9 @@ public class ScoreBoardService {
      * @param gameSummary
      */
     public void getScoreSummary(PrintStream printStream, List<Game> gameSummary) {
+        if(gameSummary.isEmpty()) {
+            printStream.println("There are no ongoing live matches currently !");
+        } else {
         printStream.println("LIVE SCORE (Summary)\n==============");
         // sort using the index of the linked list and total score
         List<Game> orderedList = gameSummary.stream().sorted(
@@ -81,5 +84,6 @@ public class ScoreBoardService {
                 }
         ).toList();
         orderedList.stream().forEach(game -> printStream.println(game.toString()));
+    }
     }
 }
