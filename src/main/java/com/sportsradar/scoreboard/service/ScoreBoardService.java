@@ -4,7 +4,6 @@ import com.sportsradar.scoreboard.model.Game;
 
 import java.io.PrintStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service Class catering Functionalities of Scoreboard Application
@@ -74,7 +73,7 @@ public class ScoreBoardService {
         // sort using the index of the linked list and total score
         List<Game> orderedList = gameSummary.stream().sorted(
                 (o1, o2) -> {
-                    if (o1.getTotalScore() == o2.getTotalScore()) {
+                    if (o1.getTotalScore().equals(o2.getTotalScore())) {
                         return gameSummary.indexOf(o1) > gameSummary.indexOf(o2) ? -1 : 1;
                     } else if (o1.getTotalScore() < o2.getTotalScore()) {
                         return 1;

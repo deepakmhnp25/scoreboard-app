@@ -5,7 +5,10 @@ import com.sportsradar.scoreboard.service.ScoreBoardService;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintStream;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.Predicate;
 
 /**
