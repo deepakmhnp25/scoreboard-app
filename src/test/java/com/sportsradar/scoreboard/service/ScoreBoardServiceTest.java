@@ -77,7 +77,7 @@ public class ScoreBoardServiceTest {
         scoreBoardService.getScoreSummary(ps, gameSummary);
 
         //then
-        assertOutput(byteArrayOutputStream, "Live Scores (Summary)\n==============\r\nJuventus FC - AC Milan: 5 - 3\r\nLiverpool FC - As Monaco: 1 - 1\r\n");
+        assertOutput(byteArrayOutputStream, "LIVE SCORE (Summary)\n==============\r\nJuventus FC - AC Milan: 5 - 3\r\nLiverpool FC - As Monaco: 1 - 1\r\n");
     }
 
     private void scoreUpdate(String userInputs, Game game) {
