@@ -25,7 +25,7 @@ public class ScoreboardApplication {
         ScoreBoardService scoreBoardService = new ScoreBoardService();
 
         PrintStream printStream = new PrintStream(System.out);
-        printStream.println("CHOOSE AN OPTION BELOW\n=====================");
+        printStream.println("WELCOME TO SCOREBOARD APP. CHOOSE AN OPTION BELOW\n===============================================");
         Scanner scanner = new Scanner(System.in);
         List<Game> gameSummary = new ArrayList<>();
         showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
@@ -38,8 +38,7 @@ public class ScoreboardApplication {
      * @param gameSummary
      */
     private static void showMainMenu(ScoreBoardService scoreBoardService, Scanner scanner, PrintStream printStream, List<Game> gameSummary) {
-        printStream.println(" Main Menu");
-        printStream.println(" 1. Start a new game \n 2. Finish a game \n 3. Update score \n 4. Live Score (Summary) \n 5. Exit Score Board App");
+        printStream.println("\nMain Menu   ->  1. Start a new game   2. Finish a game   3. Update score   4. Live Score (Summary)   5. Exit Score Board App");
         printStream.println("Enter your option ");
         if (scanner.hasNext()) {
             StringBuilder menuOptionSb = new StringBuilder(scanner.next());
@@ -74,7 +73,13 @@ public class ScoreboardApplication {
             case 3:
                 updateGame(scoreBoardService, scanner, printStream, gameSummary);
                 break;
-            default: showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
+            case 4:
+                scoreBoardService.getScoreSummary(printStream, gameSummary);
+                showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
+                break;
+            default:
+                showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
+                break;
 
         }
     }
@@ -90,6 +95,7 @@ public class ScoreboardApplication {
     private static void updateGame(ScoreBoardService scoreBoardService, Scanner scanner, PrintStream printStream, List<Game> gameSummary) {
         if (gameSummary.isEmpty()) {
             printStream.println("There are no ongoing live matches currently !");
+            showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
         } else {
             printStream.println("Enter Home / Away team name to Update the score. (Enter 5 to exit to Main Menu)");
             StringBuilder teamNamesb = new StringBuilder(scanner.next());
@@ -102,6 +108,7 @@ public class ScoreboardApplication {
                     updateScore(scoreBoardService, scanner, printStream, gameSummary, teamName);
                 } else {
                     printStream.println("There is no ongoing matches from the input team name");
+                    showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
                 }
             }
         }
@@ -123,13 +130,9 @@ public class ScoreboardApplication {
         if (optionalGame.isPresent()) {
             // Ongoing game exist
             scoreBoardService.updateScore(scanner, printStream, optionalGame);
-            getScoreSummary(printStream, gameSummary);
+            scoreBoardService.getScoreSummary(printStream, gameSummary);
             showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
-        } else {
-            printStream.println("Game Not Found!!!");
         }
-
-        showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
     }
 
     /**
@@ -143,8 +146,9 @@ public class ScoreboardApplication {
     private static void finishGame(ScoreBoardService scoreBoardService, Scanner scanner, PrintStream printStream, List<Game> gameSummary) {
         if (gameSummary.isEmpty()) {
             printStream.println("There are no ongoing live matches currently !");
+            showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
         } else {
-            getScoreSummary(printStream, gameSummary);
+            scoreBoardService.getScoreSummary(printStream, gameSummary);
             printStream.println("Enter Home / Away team name to Finish the game. (Enter 5 to exit to Main Menu)");
             StringBuilder teamNamesb = new StringBuilder(scanner.next());
             String teamName = scanner.hasNextLine() ? teamNamesb.append(scanner.nextLine()).toString() : teamNamesb.toString();
@@ -157,18 +161,13 @@ public class ScoreboardApplication {
                     List<Game> collect = gameSummary.stream().filter(isFinished).toList();
                     gameSummary.removeAll(collect);
                     printStream.println("Game Finished !");
-                    getScoreSummary(printStream, gameSummary);
+                    scoreBoardService.getScoreSummary(printStream, gameSummary);
                     showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
                 } else {
                     printStream.println("There is no ongoing matches from the input team name");
                 }
             }
         }
-    }
-
-    private static void getScoreSummary(PrintStream printStream, List<Game> gameSummary) {
-        printStream.println("Live Scores (Summary)\n==============");
-        gameSummary.stream().forEach(s -> printStream.println(s.toString()));
     }
 
     /**
@@ -200,8 +199,7 @@ public class ScoreboardApplication {
                     gameSummary.add(gameStarted);
                     printStream.println("Game Started !");
                     // Print current score summary of live games
-                    printStream.println("Score Summary (Live Score)\n================");
-                    getScoreSummary(printStream, gameSummary);
+                    scoreBoardService.getScoreSummary(printStream, gameSummary);
                     // show main menu after successfully starting the game
                     showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
                 } else {

@@ -9,10 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class ScoreBoardServiceTest {
 
@@ -37,12 +34,12 @@ public class ScoreBoardServiceTest {
 
         // Then
         // checking the initial scores
-        Assert.assertEquals("0", startingGame.getHomeTeam().get(homeTeam));
-        Assert.assertEquals("0", startingGame.getAwayTeam().get(awayTeam));
-        for(Map.Entry<String, String> entry: startingGame.getHomeTeam().entrySet()){
+        Assert.assertEquals(Integer.valueOf(0), startingGame.getHomeTeam().get(homeTeam));
+        Assert.assertEquals(Integer.valueOf(0), startingGame.getAwayTeam().get(awayTeam));
+        for(Map.Entry<String, Integer> entry: startingGame.getHomeTeam().entrySet()){
             Assert.assertEquals(homeTeam, entry.getKey());
         }
-        for(Map.Entry<String, String> entry: startingGame.getAwayTeam().entrySet()){
+        for(Map.Entry<String, Integer> entry: startingGame.getAwayTeam().entrySet()){
             Assert.assertEquals(awayTeam, entry.getKey());
         }
     }
@@ -52,14 +49,39 @@ public class ScoreBoardServiceTest {
      */
     @Test
     public void shouldUpdateScore() {
-        Map<String, String> homeTeam = new HashMap<>();
-        Map<String, String> awayTeam = new HashMap<>();
-        homeTeam.put("Manu FC", "0");
-        awayTeam.put("Barcelona FC", "0");
-        Game game = new Game();
-        game.setHomeTeam(homeTeam);
-        game.setAwayTeam(awayTeam);
-        InputStream stdin = supplyInputs("2\n3");
+        //when
+        Game game = getGame("Manu FC", "Barcelona FC");
+        scoreUpdate("2\n3", game);
+        //then
+        Assert.assertEquals(Integer.valueOf(2), Integer.valueOf(game.getHomeTeam().entrySet().stream().findFirst().get().getValue()));
+        Assert.assertEquals(Integer.valueOf(3), Integer.valueOf(game.getAwayTeam().entrySet().stream().findFirst().get().getValue()));
+    }
+
+    @Test
+    public void shouldShowSortedSummary() {
+        //when
+        Game game1 = getGame("Liverpool FC", "As Monaco");
+        Game game2 = getGame("Juventus FC", "AC Milan");
+        //when
+        scoreUpdate("1\n1", game1);
+        scoreUpdate("5\n3", game2);
+        List<Game> gameSummary = new ArrayList<>();
+        gameSummary.add(game1);
+        gameSummary.add(game2);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(byteArrayOutputStream);
+        PrintStream stdout = System.out;
+        System.setOut(ps);
+
+        scoreBoardService.getScoreSummary(ps, gameSummary);
+
+        //then
+        assertOutput(byteArrayOutputStream, "Live Scores (Summary)\n==============\r\nJuventus FC - AC Milan: 5 - 3\r\nLiverpool FC - As Monaco: 1 - 1\r\n");
+    }
+
+    private void scoreUpdate(String userInputs, Game game) {
+        InputStream stdin = supplyInputs(userInputs);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(byteArrayOutputStream);
         PrintStream stdout = System.out;
@@ -67,8 +89,17 @@ public class ScoreBoardServiceTest {
         scoreBoardService.updateScore(new Scanner(System.in),stdout, Optional.of(game));
         System.setIn(stdin);
         System.setOut(stdout);
-        Assert.assertEquals("2", game.getHomeTeam().entrySet().stream().findFirst().get().getValue());
-        Assert.assertEquals("3", game.getAwayTeam().entrySet().stream().findFirst().get().getValue());
+    }
+
+    private Game getGame(String Liverpool_FC, String As_Monaco) {
+        Map<String, Integer> homeTeam = new HashMap<>();
+        Map<String, Integer> awayTeam = new HashMap<>();
+        homeTeam.put(Liverpool_FC, 0);
+        awayTeam.put(As_Monaco, 0);
+        Game game = new Game();
+        game.setHomeTeam(homeTeam);
+        game.setAwayTeam(awayTeam);
+        return game;
     }
 
     /**
@@ -82,5 +113,16 @@ public class ScoreBoardServiceTest {
         ByteArrayInputStream in = new ByteArrayInputStream(userInputs.getBytes());
         System.setIn(in);
         return stdin;
+    }
+
+    /**
+     * Generic Method to assert the output
+     *
+     * @param byteArrayOutputStream
+     * @param expected
+     */
+    private void assertOutput(ByteArrayOutputStream byteArrayOutputStream, String expected) {
+        String outputText = byteArrayOutputStream.toString();
+        Assert.assertTrue(outputText.contains(expected));
     }
 }

@@ -3,10 +3,7 @@ package com.sportsradar.scoreboard.service;
 import com.sportsradar.scoreboard.model.Game;
 
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Service Class catering Functionalities of Scoreboard Application
@@ -23,15 +20,22 @@ public class ScoreBoardService {
      */
     public Game startGame(String homeTeam, String awayTeam) {
         Game startingGame = new Game();
-        Map<String, String> homeTeamMap = new HashMap<>();
-        homeTeamMap.put(homeTeam, "0");
+        Map<String, Integer> homeTeamMap = new HashMap<>();
+        homeTeamMap.put(homeTeam, 0);
         startingGame.setHomeTeam(homeTeamMap);
-        Map<String, String> awayTeamMap = new HashMap<>();
-        awayTeamMap.put(awayTeam, "0");
+        Map<String, Integer> awayTeamMap = new HashMap<>();
+        awayTeamMap.put(awayTeam, 0);
         startingGame.setAwayTeam(awayTeamMap);
+        startingGame.setTotalScore(0);
         return startingGame;
     }
 
+    /**
+     * Updates Score of an ongoing match
+     * @param scanner
+     * @param printStream
+     * @param optionalGame
+     */
     public void updateScore(Scanner scanner, PrintStream printStream, Optional<Game> optionalGame) {
         Game game;
         if (optionalGame.isPresent()) {
@@ -42,11 +46,30 @@ public class ScoreBoardService {
             printStream.println("Enter away team score");
             StringBuilder awayTeamScoreSb = new StringBuilder(scanner.next());
             String awayTeamScore = scanner.hasNextLine() ? awayTeamScoreSb.append(scanner.nextLine()).toString() : awayTeamScoreSb.toString();
-            game.getHomeTeam().entrySet().stream().findFirst().ifPresentOrElse(homeTeam -> homeTeam.setValue(homeTeamScore), () ->
-                    printStream.println("Unable to update the score"));
-            game.getAwayTeam().entrySet().stream().findFirst().ifPresentOrElse(awayTeam -> awayTeam.setValue(awayTeamScore), () ->
-                    printStream.println("Unable to update the score"));
-            printStream.println("Score updated successfully!");
+            try {
+                int homeScore = Integer.parseInt(homeTeamScore);
+                int awayScore = Integer.parseInt(awayTeamScore);
+                game.getHomeTeam().entrySet().stream().findFirst().ifPresentOrElse(homeTeam -> homeTeam.setValue(homeScore), () ->
+                        printStream.println("Unable to update the score"));
+                game.getAwayTeam().entrySet().stream().findFirst().ifPresentOrElse(awayTeam -> awayTeam.setValue(awayScore), () ->
+                        printStream.println("Unable to update the score"));
+                game.setTotalScore(homeScore+awayScore);
+                printStream.println("Score updated successfully!");
+            } catch (NumberFormatException exception){
+                printStream.println("Enter a valid score! Please try again");
+            } catch (Exception exception){
+                printStream.println("Could not update the score. Please try again!");
+            }
         }
+    }
+
+    /**
+     * Get sorted score summary
+     * @param printStream
+     * @param gameSummary
+     */
+    public void getScoreSummary(PrintStream printStream, List<Game> gameSummary) {
+        printStream.println("LIVE SCORE (Summary)\n==============");
+        gameSummary.stream().sorted(Comparator.comparingInt(Game::getTotalScore).reversed()).forEach(s -> printStream.println(s.toString()));
     }
 }

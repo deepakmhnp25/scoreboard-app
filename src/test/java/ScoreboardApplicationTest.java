@@ -154,6 +154,19 @@ public class ScoreboardApplicationTest {
     }
 
     /**
+     * If chose to skip to main menu instead of finishing the game
+     */
+    @Test
+    public void shouldExitToMainMenuWhileFinishing() {
+        // Given option 1 to start the game, start multiple games, finish Liverpool FC game
+        InputStream stdin = supplyInputs("1\nLiverpool FC\nAC Milan\n2\n5");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        // then
+        assertOutput(byteArrayOutputStream, "Exiting to Main Menu ...");
+    }
+
+    /**
      * Trying to finish a game which is not ongoing.
      */
     @Test
@@ -167,6 +180,31 @@ public class ScoreboardApplicationTest {
     }
 
     /**
+     * No ongoing match exist to update the score
+     */
+    @Test
+    public void NoOngoingMatchToUpdateTheScore() {
+        // Given option 2 to finish the game
+        InputStream stdin = supplyInputs("3");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        // then
+        assertOutput(byteArrayOutputStream, "There are no ongoing live matches currently !");
+    }
+
+    /**
+     * Exit update score menu
+     */
+    @Test
+    public void exitUpdateScoreMenu() {
+        // Given option 2 to finish the game
+        InputStream stdin = supplyInputs("1\nManu FC\nBarcelona\n3\n5");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        // then
+        assertOutput(byteArrayOutputStream, "Exiting to Main Menu ...");
+    }
+    /**
      * Update score for an ongoing match
      */
     @Test
@@ -179,6 +217,9 @@ public class ScoreboardApplicationTest {
         assertOutput(byteArrayOutputStream, "Score updated successfully!");
     }
 
+    /**
+     * User can only update ongoing game scores
+     */
     @Test
     public void matchShouldExistToUpdateTheScore() {
         // Given option 1 to start the game, try to update the score for another match
@@ -187,6 +228,36 @@ public class ScoreboardApplicationTest {
         ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
         // then
         assertOutput(byteArrayOutputStream, "There is no ongoing matches from the input team name");
+    }
+
+    /**
+     * Entering scores which are not numbers
+     */
+    @Test
+    public void shouldEnterValidScoreUpdateTheScore() {
+        // Given option 1 to start the game, try to update the score for another match
+        InputStream stdin = supplyInputs("1\nManu FC\nBarcelona\n3\nManu FC\nabc\ndef");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+        // then
+        assertOutput(byteArrayOutputStream, "Enter a valid score! Please try again");
+    }
+
+    /**
+     * should show score summary
+     */
+    @Test
+    public void shouldShowScoreSummary(){
+
+        // Given option 1 to start the game, try to update the score for another match
+        InputStream stdin = supplyInputs("1\nManu FC\nBarcelona\n1\nLiverpool FC\nPSG FC\n4");
+        // when
+        ByteArrayOutputStream byteArrayOutputStream = executeSelectedMenuOption(stdin);
+
+        // then
+        assertOutput(byteArrayOutputStream, "LIVE SCORE (Summary)");
+        assertOutput(byteArrayOutputStream, "Manu FC - Barcelona: 0 - 0");
+        assertOutput(byteArrayOutputStream, "Liverpool FC - PSG FC: 0 - 0");
     }
 
     /**

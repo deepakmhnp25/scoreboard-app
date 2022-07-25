@@ -10,38 +10,48 @@ import java.util.Map;
  */
 public class Game {
 
-    private Map<String, String> homeTeam;
+    private Map<String, Integer> homeTeam;
 
-    private Map<String, String> awayTeam;
+    private Map<String, Integer> awayTeam;
 
-    public Map<String, String> getHomeTeam() {
+    private Integer totalScore;
+
+    public Map<String, Integer> getHomeTeam() {
         return homeTeam;
     }
 
-    public void setHomeTeam(Map<String, String> homeTeam) {
+    public void setHomeTeam(Map<String, Integer> homeTeam) {
         this.homeTeam = homeTeam;
     }
 
-    public Map<String, String> getAwayTeam() {
+    public Map<String, Integer> getAwayTeam() {
         return awayTeam;
     }
 
-    public void setAwayTeam(Map<String, String> awayTeam) {
+    public void setAwayTeam(Map<String, Integer> awayTeam) {
         this.awayTeam = awayTeam;
+    }
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
     }
 
     @Override
     public String toString() {
         String homeTeamName = null;
-        String homeTeamScore = null;
+        Integer homeTeamScore = null;
         String awayTeamName = null;
-        String awayTeamScore = null;
+        Integer awayTeamScore = null;
 
-        for(Map.Entry<String, String> entry: this.homeTeam.entrySet()){
+        for(Map.Entry<String, Integer> entry: this.homeTeam.entrySet()){
             homeTeamName = entry.getKey();
             homeTeamScore = entry.getValue();
         }
-        for(Map.Entry<String, String> entry: this.awayTeam.entrySet()){
+        for(Map.Entry<String, Integer> entry: this.awayTeam.entrySet()){
             awayTeamName = entry.getKey();
             awayTeamScore = entry.getValue();
         }
