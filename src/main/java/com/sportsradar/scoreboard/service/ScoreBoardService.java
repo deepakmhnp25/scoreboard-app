@@ -4,6 +4,7 @@ import com.sportsradar.scoreboard.model.Game;
 
 import java.io.PrintStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service Class catering Functionalities of Scoreboard Application
@@ -70,6 +71,15 @@ public class ScoreBoardService {
      */
     public void getScoreSummary(PrintStream printStream, List<Game> gameSummary) {
         printStream.println("LIVE SCORE (Summary)\n==============");
-        gameSummary.stream().sorted(Comparator.comparingInt(Game::getTotalScore).reversed()).forEach(s -> printStream.println(s.toString()));
+        List<Game> orderedList = gameSummary.stream().sorted(
+                (o1, o2) -> {
+                    if (o1.getTotalScore() == o2.getTotalScore()) {
+                        return gameSummary.indexOf(o1) > gameSummary.indexOf(o2) ? -1 : 1;
+                    } else if (o1.getTotalScore() < o2.getTotalScore()) {
+                        return 1;
+                    } else return -1;
+                }
+        ).toList();
+        orderedList.stream().forEach(game -> printStream.println(game.toString()));
     }
 }

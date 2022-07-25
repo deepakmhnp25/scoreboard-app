@@ -5,10 +5,7 @@ import com.sportsradar.scoreboard.service.ScoreBoardService;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -27,7 +24,8 @@ public class ScoreboardApplication {
         PrintStream printStream = new PrintStream(System.out);
         printStream.println("WELCOME TO SCOREBOARD APP. CHOOSE AN OPTION BELOW\n===============================================");
         Scanner scanner = new Scanner(System.in);
-        List<Game> gameSummary = new ArrayList<>();
+        // using linked list to capture insertion order. this will help in sorting score summary
+        List<Game> gameSummary = new LinkedList<>();
         showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
     }
 
