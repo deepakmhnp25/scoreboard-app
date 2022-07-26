@@ -62,7 +62,7 @@ public class ScoreboardApplication {
     private static void doScoreBoardOperation(ScoreBoardService scoreBoardService, Scanner scanner, PrintStream printStream, List<Game> gameSummary, int option) {
 
         switch (option) {
-            // Option to start the game
+            // start the game
             case 1:
                 startNewGame(scoreBoardService, scanner, printStream, gameSummary);
                 break;
@@ -74,6 +74,7 @@ public class ScoreboardApplication {
             case 3:
                 updateGame(scoreBoardService, scanner, printStream, gameSummary);
                 break;
+            // Get score summary
             case 4:
                 scoreBoardService.getScoreSummary(printStream, gameSummary);
                 showMainMenu(scoreBoardService, scanner, printStream, gameSummary);
