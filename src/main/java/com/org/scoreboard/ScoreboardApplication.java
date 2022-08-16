@@ -1,7 +1,7 @@
-package com.sportsradar.scoreboard;
+package com.org.scoreboard;
 
-import com.sportsradar.scoreboard.model.Game;
-import com.sportsradar.scoreboard.service.ScoreBoardService;
+import com.org.scoreboard.model.Game;
+import com.org.scoreboard.service.ScoreBoardService;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintStream;

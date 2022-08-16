@@ -1,6 +1,6 @@
-package com.sportsradar.scoreboard.service;
+package com.org.scoreboard.service;
 
-import com.sportsradar.scoreboard.model.Game;
+import com.org.scoreboard.model.Game;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

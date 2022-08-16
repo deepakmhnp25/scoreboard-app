@@ -1,4 +1,4 @@
-package com.sportsradar.scoreboard.model;
+package com.org.scoreboard.model;
 
 import java.util.Map;
 

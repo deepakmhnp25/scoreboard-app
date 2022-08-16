@@ -1,6 +1,7 @@
 # Scoreboard
 * This is a pure console based football Scoreboard application (NOT a webservice / microservice)
 * This has the functionality to Start a game, Finish a game, Update the score, Live Score Summary functionalities
+* Matches having same total score will be sorted based on which game started first
 * This is completely developed with TDD approach.
 
 # Assumptions

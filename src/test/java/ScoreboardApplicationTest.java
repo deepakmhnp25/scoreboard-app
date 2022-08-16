@@ -1,4 +1,4 @@
-import com.sportsradar.scoreboard.ScoreboardApplication;
+import com.org.scoreboard.ScoreboardApplication;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
